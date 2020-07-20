@@ -2,35 +2,51 @@ package com.test.backend.entities;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import com.test.backend.other.Gender;
 
 @Entity
+@Table(name="employee")
 public class Employee {
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	
+	@Column(length=50)
 	private String name;
+	
 	private Date birthDate;
-	private Long positionId;
+	
+	@ManyToOne
+    @JoinColumn(name="id", referencedColumnName = "id", insertable = false, updatable = false)
+    private Position position;
+	
 	private Long idNumber;
-	private Gender gender;
+	
+	@Enumerated(EnumType.STRING)
+    private Gender gender;
+	
 	private boolean isDelete = false;
 	
 	public Employee() {
 		super();
 	}
 
-	public Employee(String name, 
-			Date birthDate, 
-			Long positionId, Long idNumber, Gender gender, boolean isDelete) {
+	public Employee(String name, Date birthDate, Position position, Long idNumber, Gender gender, boolean isDelete) {
 		this.name = name;
 		this.birthDate = birthDate;
-		this.positionId = positionId;
+		this.position = position;
 		this.idNumber = idNumber;
 		this.gender = gender;
 		this.isDelete = isDelete;
@@ -52,17 +68,20 @@ public class Employee {
 		this.name = name;
 	}
 
-	public Date getBirthDate() { return birthDate; }
+	public Date getBirthDate() { 
+		return birthDate; 
+	}
 	
-	public void setBirthDate(Date birthDate) { this.birthDate = birthDate; }
-	
-
-	public Long getPositionId() {
-		return positionId;
+	public void setBirthDate(Date birthDate) { 
+		this.birthDate = birthDate; 
 	}
 
-	public void setPositionId(Long positionId) {
-		this.positionId = positionId;
+	public Position getPosition() {
+		return position;
+	}
+
+	public void setPosition(Position position) {
+		this.position = position;
 	}
 
 	public Long getIdNumber() {
